@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agustin Lozano Inmobiliaria - Sistema de Gestión</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1400px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #e9ecef;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            margin-bottom: -3px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .table th {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .stat-card h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .document-preview {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .document-header {
+            text-align: center;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .calculation-table {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .calculation-table td {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .calculation-table .label {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .calculation-table .total {
+            background: #2c3e50;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 AGUSTIN LOZANO INMOBILIARIA</h1>
+            <p>Sistema de Gestión de Bienes Raíces</p>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('dashboard')">📊 Dashboard</button>
+            <button class="tab" onclick="openTab('bienes')">🏠 Bienes</button>
+            <button class="tab" onclick="openTab('contratos')">📝 Contratos</button>
+            <button class="tab" onclick="openTab('comprobantes')">💰 Comprobantes</button>
+            <button class="tab" onclick="openTab('facturas')">🧾 Facturas</button>
+            <button class="tab" onclick="openTab('reportes')">📈 Reportes</button>
+        </div>
+        
+        <div class="content">
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="tab-content active">
+                <h2 style="margin-bottom: 20px; color: #2c3e50;">Panel de Control</h2>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <h2>4</h2>
+                        <p>Bienes Registrados</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h2>3</h2>
+                        <p>Actualmente Arrendados</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <h2>$4.6M</h2>
+                        <p>Ingresos Mensuales</p>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <h2>75%</h2>
+                        <p>Tasa de Ocupación</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>📋 Contratos Próximos a Vencer (30 días)</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Bien</th>
+                                <th>Arrendatario</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Local Comercial - José A. Raffo</td>
+                                <td>Comercializadora XYZ</td>
+                                <td>15/04/2026</td>
+                                <td><span class="badge badge-warning">⚠️ Próximo a vencer</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h3>💵 Pagos Pendientes</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Factura</th>
+                                <th>Cliente</th>
+                                <th>Valor</th>
+                                <th>Días Vencido</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#00120</td>
+                                <td>Inversiones ABC</td>
+                                <td>$1,559,729</td>
+                                <td><span class="badge badge-danger">5 días</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- BIENES -->
+            <div id="bienes" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #2c3e50;">Gestión de Bienes Inmuebles</h2>
+                
+                <div class="card">
+                    <h3>➕ Registrar Nuevo Bien</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Código del Bien</label>
+                                <input type="text" placeholder="Ej: LOC-001" value="LOC-004">
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo de Bien</label>
+                                <select>
+                                    <option>Local Comercial</option>
+                                    <option>Apartamento</option>
+                                    <option>Casa</option>
+                                    <option>Bodega</option>
+                                    <option>Oficina</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            <input type="text" placeholder="Dirección completa" value="Calle 5 No. 36-100, Barrio San Fernando">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ciudad</label>
+                                <input type="text" value="Santiago de Cali">
+                            </div>
+                            <div class="form-group">
+                                <label>Área (m²)</label>
+                                <input type="number" value="150">
+                            </div>
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <select>
+                                    <option>Disponible</option>
+                                    <option selected>Arrendado</option>
+                                    <option>Mantenimiento</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea rows="3" placeholder="Características del bien">Local comercial de 150m², 2 baños, parqueadero para 3 vehículos, excelente ubicación comercial.</textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">💾 Guardar Bien</button>
+                        <button type="button" class="btn btn-secondary">🔄 Limpiar</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>📑 Listado de Bienes</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Dirección</th>
+                                <th>Área (m²)</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>LOC-001</td>
+                                <td>Local Comercial</td>
+                                <td>José A. Raffo y Cía S en C</td>
+                                <td>200</td>
+                                <td><span class="badge badge-success">Arrendado</span></td>
+                                <td>
+                                    <button class="btn btn-sm" style="padding: 5px 10px; font-size: 0.85em;">✏️ Editar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>LOC-002</td>
+                                <td>Local Comercial</td>
+                                <td>Centro Comercial, Piso 2</td>
+                                <td>180</td>
+                                <td><span class="badge badge-success">Arrendado</span></td>
+                                <td>
+                                    <button class="btn btn-sm" style="padding: 5px 10px; font-size: 0.85em;">✏️ Editar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>LOC-003</td>
+                                <td>Apartamento</td>
+                                <td>Torre Empresarial, Apt 501</td>
+                                <td>120</td>
+                                <td><span class="badge badge-warning">Disponible</span></td>
+                                <td>
+                                    <button class="btn btn-sm" style="padding: 5px 10px; font-size: 0.85em;">✏️ Editar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>LOC-004</td>
+                                <td>Local Comercial</td>
+                                <td>Calle 5 No. 36-100</td>
+                                <td>150</td>
+                                <td><span class="badge badge-success">Arrendado</span></td>
+                                <td>
+                                    <button class="btn btn-sm" style="padding: 5px 10px; font-size: 0.85em;">✏️ Editar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- CONTRATOS -->
+            <div id="contratos" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #2c3e50;">Gestión de Contratos de Arrendamiento</h2>
+                
+                <div class="card">
+                    <h3>➕ Nuevo Contrato</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Bien Inmueble</label>
+                                <select>
+                                    <option>Seleccione un bien...</option>
+                                    <option>LOC-001 - José A. Raffo</option>
+                                    <option>LOC-002 - Centro Comercial</option>
+                                    <option selected>LOC-003 - Torre Empresarial</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Arrendatario</label>
+                                <select>
+                                    <option>Seleccione arrendatario...</option>
+                                    <option selected>José Penilla Restrepo</option>
+                                    <option>Comercializadora ABC S.A.S</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Fecha Inicio</label>
+                                <input type="date" value="2026-01-01">
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha Fin</label>
+                                <input type="date" value="2026-12-31">
+                            </div>
+                            <div class="form-group">
+                                <label>Día de Pago</label>
+                                <input type="number" min="1" max="31" value="5">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Valor Canon (sin IVA)</label>
+                                <input type="number" value="1309000" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>IVA (%)</label>
+                                <input type="number" value="19" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Valor Total Mensual</label>
+                                <input type="number" value="1557710" readonly style="background: #e9ecef;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Depósito Garantía</label>
+                                <input type="number" value="1500000" placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Valor Administración</label>
+                                <input type="number" value="0" placeholder="0">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Observaciones</label>
+                            <textarea rows="2" placeholder="Notas adicionales del contrato">Contrato anual renovable. Incremento según IPC.</textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">💾 Guardar Contrato</button>
+                        <button type="button" class="btn btn-success">📄 Generar Contrato PDF</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>📑 Contratos Activos</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Bien</th>
+                                <th>Arrendatario</th>
+                                <th>Inicio</th>
+                                <th>Fin</th>
+                                <th>Canon Mensual</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#001</td>
+                                <td>LOC-001</td>
+                                <td>José Penilla Restrepo</td>
+                                <td>26/03/2026</td>
+                                <td>26/03/2027</td>
+                                <td>$1,559,729</td>
+                                <td><span class="badge badge-success">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td>#002</td>
+                                <td>LOC-002</td>
+                                <td>Comercializadora ABC</td>
+                                <td>01/02/2026</td>
+                                <td>01/02/2027</td>
+                                <td>$1,785,000</td>
+                                <td><span class="badge badge-success">Activo</span></td>
+                            </tr>
+                            <tr>
+                                <td>#003</td>
+                                <td>LOC-004</td>
+                                <td>Inversiones XYZ Ltda.</td>
+                                <td>15/01/2026</td>
+                                <td>15/01/2027</td>
+                                <td>$1,309,000</td>
+                                <td><span class="badge badge-success">Activo</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- COMPROBANTES -->
+            <div id="comprobantes" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #2c3e50;">Comprobantes de Egreso</h2>
+                
+                <div class="card">
+                    <h3>➕ Generar Comprobante de Egreso</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>No. Comprobante</label>
+                                <input type="text" value="11916" readonly style="background: #e9ecef;">
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha</label>
+                                <input type="date" value="2026-03-26">
+                            </div>
+                            <div class="form-group">
+                                <label>Contrato Asociado</label>
+                                <select>
+                                    <option selected>Contrato #001 - LOC-001</option>
+                                    <option>Contrato #002 - LOC-002</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Concepto</label>
+                            <textarea rows="2">CANON MARZO/26
+UN MILLON QUINIENTOS NOVENTA Y NUEVE MIL SETECIENTOS VEINTINUEVE PESOS</textarea>
+                        </div>
+                        
+                        <h4 style="margin-top: 20px; margin-bottom: 15px; color: #495057;">Columna DEBE</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>IVA 19%</label>
+                                <input type="number" value="155990" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>CIMA 9%</label>
+                                <input type="number" value="34665" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>SEGURO 2%</label>
+                                <input type="number" value="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>RTE FTE 10%</label>
+                                <input type="number" value="15599" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>RTE ICA 1%</label>
+                                <input type="number" value="1560" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin-top: 20px; margin-bottom: 15px; color: #495057;">Columna HABER</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Canon</label>
+                                <input type="number" value="1456492" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Transferencia</label>
+                                <input type="number" value="276733" step="0.01">
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin-top: 20px; margin-bottom: 15px; color: #495057;">Información de Transferencia</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Banco</label>
+                                <input type="text" value="OCCIDENTE - CTE">
+                            </div>
+                            <div class="form-group">
+                                <label>Cuenta</label>
+                                <input type="text" value="0-02082460">
+                            </div>
+                            <div class="form-group">
+                                <label>Beneficiario</label>
+                                <input type="text" value="José A. Raffo y Cía S en C">
+                            </div>
+                        </div>
+                        
+                        <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                            <div style="display: flex; justify-content: space-between; font-size: 1.1em;">
+                                <strong>TOTAL DEBE:</strong>
+                                <strong style="color: #d32f2f;">$ 190,655</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 1.1em; margin-top: 10px;">
+                                <strong>TOTAL HABER:</strong>
+                                <strong style="color: #2e7d32;">$ 1,750,384</strong>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-size: 1.3em; margin-top: 15px; padding-top: 15px; border-top: 2px solid #90caf9;">
+                                <strong>TOTAL A PAGAR:</strong>
+                                <strong style="color: #1565c0;">$ 1,559,729</strong>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">💾 Guardar Comprobante</button>
+                        <button type="button" class="btn btn-success">📄 Generar PDF</button>
+                    </form>
+                </div>
+                
+                <div class="document-preview">
+                    <div class="document-header">
+                        <h2 style="color: #2c3e50;">AGUSTIN LOZANO INMOBILIARIA</h2>
+                        <p>Agustin Lozano - NIT: 16.715.363-6</p>
+                        <h3 style="margin-top: 15px;">COMPROBANTE DE EGRESO No.11916</h3>
+                    </div>
+                    
+                    <p style="margin-bottom: 15px;"><strong>SANTIAGO DE CALI, MARZO/26</strong></p>
+                    <p style="margin-bottom: 15px;"><strong>JOSÉ A RAFFO Y CÍA S EN C</strong></p>
+                    <p style="margin-bottom: 20px;">UN MILLÓN QUINIENTOS NOVENTA Y NUEVE MIL SETECIENTOS VEINTINUEVE PESOS</p>
+                    
+                    <table class="calculation-table">
+                        <tr>
+                            <td class="label">CHEQUE No.</td>
+                            <td style="text-align: center;" colspan="2">BANCO</td>
+                            <td class="label" colspan="2">CC / NIT</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5" style="vertical-align: top; font-weight: bold;">CANON MARZO/26</td>
+                            <td style="width: 20%; font-weight: bold; background: #f8f9fa;">DEBE</td>
+                            <td style="width: 20%; text-align: right;">$</td>
+                            <td style="width: 20%; font-weight: bold; background: #f8f9fa;">HABER</td>
+                            <td style="width: 20%; text-align: right;">$</td>
+                        </tr>
+                        <tr>
+                            <td>IVA 19%</td>
+                            <td style="text-align: right;">155,990</td>
+                            <td>Canon</td>
+                            <td style="text-align: right;">1,456,492</td>
+                        </tr>
+                        <tr>
+                            <td>CIMA 9%</td>
+                            <td style="text-align: right;">34,665</td>
+                            <td>Transferencia</td>
+                            <td style="text-align: right;">276,733</td>
+                        </tr>
+                        <tr>
+                            <td>RTE FTE 10%</td>
+                            <td style="text-align: right;">15,599</td>
+                            <td rowspan="2">OCCIDENTE - CTE<br>0-02082460</td>
+                            <td rowspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>RTE ICA 1%</td>
+                            <td style="text-align: right;">1,560</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">SUMAS</td>
+                            <td style="font-weight: bold;">$</td>
+                            <td style="text-align: right; font-weight: bold;">190,655</td>
+                            <td style="font-weight: bold;">$</td>
+                            <td style="text-align: right; font-weight: bold;">1,750,384</td>
+                        </tr>
+                        <tr>
+                            <td class="total" colspan="3">TOTAL A PAGAR</td>
+                            <td class="total" colspan="2" style="text-align: right;">$ 1,559,729</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-weight: bold;">ELABORADO</td>
+                            <td style="text-align: center; font-weight: bold;">REVISADO</td>
+                            <td colspan="3" style="text-align: center; font-weight: bold;">APROBADO</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- FACTURAS -->
+            <div id="facturas" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #2c3e50;">Facturas de Venta</h2>
+                
+                <div class="card">
+                    <h3>➕ Generar Factura</h3>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>No. Factura</label>
+                                <input type="text" value="00120" readonly style="background: #e9ecef;">
+                            </div>
+                            <div class="form-group">
+                                <label>Fecha Factura</label>
+                                <input type="date" value="2024-07-29">
+                            </div>
+                            <div class="form-group">
+                                <label>Contrato</label>
+                                <select>
+                                    <option selected>Contrato #001</option>
+                                    <option>Contrato #002</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Concepto</label>
+                            <textarea rows="3">ARRENDAMIENTO EDIFICIO UBICADO EN [DIRECCIÓN], CORRESPONDIENTE A 18 AGOSTO 2024 AL [FECHA].
+
+DE ACUERDO A CONSULTA CON LA DIAN, CONFORME AL ART. 394 DEL ESTATUTO TRIBUTARIO, SOMOS MANDATARIOS Y QUE EL BENEFICIARIO Y PROPIETARIO DEL INMUEBLE PARA EFECTOS DE IMPUESTOS Y RETENCIONES, ES LA EMPRESA [NOMBRE], PARA LO CUAL SE LES ENVIÓ COPIA DEL RUT.</textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Valor Venta (sin IVA)</label>
+                                <input type="number" value="29895876" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>IVA 19%</label>
+                                <input type="number" value="5680216" readonly style="background: #e9ecef;">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Factura</label>
+                                <input type="number" value="35576092" readonly style="background: #e9ecef; font-weight: bold; font-size: 1.1em;">
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">💾 Guardar Factura</button>
+                        <button type="button" class="btn btn-success">📄 Generar PDF</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3>📑 Facturas Emitidas</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No. Factura</th>
+                                <th>Fecha</th>
+                                <th>Cliente</th>
+                                <th>Concepto</th>
+                                <th>Total</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#00120</td>
+                                <td>29/07/2024</td>
+                                <td>José A. Raffo y Cía S en C</td>
+                                <td>Arrendamiento edificio</td>
+                                <td>$35,576,092</td>
+                                <td><span class="badge badge-success">Pagada</span></td>
+                            </tr>
+                            <tr>
+                                <td>#00119</td>
+                                <td>05/07/2024</td>
+                                <td>Comercializadora ABC</td>
+                                <td>Canon mensual Julio</td>
+                                <td>$1,785,000</td>
+                                <td><span class="badge badge-success">Pagada</span></td>
+                            </tr>
+                            <tr>
+                                <td>#00121</td>
+                                <td>28/03/2026</td>
+                                <td>Inversiones XYZ</td>
+                                <td>Canon mensual Marzo</td>
+                                <td>$1,559,729</td>
+                                <td><span class="badge badge-warning">Pendiente</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- REPORTES -->
+            <div id="reportes" class="tab-content">
+                <h2 style="margin-bottom: 20px; color: #2c3e50;">Reportes y Estadísticas</h2>
+                
+                <div class="card">
+                    <h3>📊 Generar Reportes</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tipo de Reporte</label>
+                            <select>
+                                <option>Ingresos por Período</option>
+                                <option>Estado de Ocupación</option>
+                                <option>Cartera por Cobrar</option>
+                                <option>Vencimientos de Contratos</option>
+                                <option>Historial de Pagos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Inicio</label>
+                            <input type="date" value="2026-01-01">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha Fin</label>
+                            <input type="date" value="2026-03-31">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">📊 Generar Reporte</button>
+                    <button class="btn btn-success">📥 Exportar a Excel</button>
+                </div>
+                
+                <div class="card">
+                    <h3>💰 Ingresos por Mes - Primer Trimestre 2026</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Contratos Activos</th>
+                                <th>Ingresos Proyectados</th>
+                                <th>Ingresos Reales</th>
+                                <th>Tasa Cobro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Enero 2026</td>
+                                <td>3</td>
+                                <td>$4,653,729</td>
+                                <td>$4,653,729</td>
+                                <td><span class="badge badge-success">100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Febrero 2026</td>
+                                <td>3</td>
+                                <td>$4,653,729</td>
+                                <td>$4,653,729</td>
+                                <td><span class="badge badge-success">100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Marzo 2026</td>
+                                <td>3</td>
+                                <td>$4,653,729</td>
+                                <td>$3,094,000</td>
+                                <td><span class="badge badge-warning">66.5%</span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background: #f8f9fa; font-weight: bold;">
+                                <td>TOTAL</td>
+                                <td>-</td>
+                                <td>$13,961,187</td>
+                                <td>$12,401,458</td>
+                                <td>88.8%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h3>🏠 Estado de Ocupación de Bienes</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Bien</th>
+                                <th>Total</th>
+                                <th>Arrendados</th>
+                                <th>Disponibles</th>
+                                <th>% Ocupación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Locales Comerciales</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>0</td>
+                                <td><span class="badge badge-success">100%</span></td>
+                            </tr>
+                            <tr>
+                                <td>Apartamentos</td>
+                                <td>1</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td><span class="badge badge-danger">0%</span></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="background: #f8f9fa; font-weight: bold;">
+                                <td>TOTAL</td>
+                                <td>4</td>
+                                <td>3</td>
+                                <td>1</td>
+                                <td>75%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function openTab(tabName) {
+            // Ocultar todos los contenidos
+            const contents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            
+            // Remover clase active de todos los tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Mostrar el contenido seleccionado
+            document.getElementById(tabName).classList.add('active');
+            
+            // Marcar el tab como activo
+            event.target.classList.add('active');
+        }
+        
+        // Simular cálculos automáticos
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Sistema Agustin Lozano Inmobiliaria cargado correctamente');
+        });
+    </script>
+</body>
+</html>
